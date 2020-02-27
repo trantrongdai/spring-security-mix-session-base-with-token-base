@@ -1,5 +1,7 @@
 package com.fishpro.securityjwt.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fishpro.securityjwt.model.JwtRequest;
-import com.fishpro.securityjwt.model.JwtResponse;
+import com.fishpro.securityjwt.domain.JwtRequest;
+import com.fishpro.securityjwt.domain.JwtResponse;
+import com.fishpro.securityjwt.domain.UsersResponse;
+import com.fishpro.securityjwt.model.User;
 import com.fishpro.securityjwt.util.JwtTokenUtil;
 
 @RestController
@@ -57,5 +61,16 @@ public class JwtAuthenticationController {
 		} catch (BadCredentialsException e) {
 			throw new Exception("INVALID_CREDENTIALS", e);
 		}
+	}
+	
+	@RequestMapping(value = "/api/users", method = RequestMethod.GET)
+	public ResponseEntity<?> getAllUsers() throws Exception {
+		User user = new User("DaiTT", "123456");
+		User user2 = new User("Ngan TT", "123456");
+		List<User> users = new ArrayList<User>();
+		users.add(user);
+		users.add(user2);
+		UsersResponse usersResponse = new UsersResponse(users);
+		return ResponseEntity.ok(usersResponse);
 	}
 }

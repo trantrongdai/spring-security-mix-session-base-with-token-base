@@ -1,4 +1,4 @@
-package com.fishpro.securityjwt.model;
+package com.fishpro.securityjwt.domain;
 
 import java.io.Serializable;
 

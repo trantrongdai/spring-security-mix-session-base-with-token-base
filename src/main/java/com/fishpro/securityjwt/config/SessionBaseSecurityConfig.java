@@ -14,11 +14,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
+
+import com.fishpro.securityjwt.exception.JwtAuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
 @Order(2)
-public class FomLoginSecurityConfig extends WebSecurityConfigurerAdapter {
+public class SessionBaseSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private UserDetailsService jwtUserDetailsService;
@@ -51,19 +54,20 @@ public class FomLoginSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/hello").permitAll()
+                .antMatchers("/hello").hasRole("ADMIN")
                 .and()
-           //     .formLogin()
-       //         .defaultSuccessUrl("/test/hello")
-      //          .failureUrl("/login?error");
-//                   .antMatchers("/**/favicon.ico", "/**/*.css", "/**/*.js", "/**/*.png", "/**/*.xlsx", "/fonts/**", "/logout").permitAll()
-//                   .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**").permitAll()
-//                   .antMatchers(RESET_PASSWORD_PAGE_URL).permitAll()
-//                  .anyRequest().hasAnyRole("ADMIN", "WEBUSER")
+
+//              .antMatchers("/**/favicon.ico", "/**/*.css", "/**/*.js", "/**/*.png", "/**/*.xlsx", "/fonts/**", "/logout").permitAll()
+//              .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**").permitAll()
+//              .antMatchers(RESET_PASSWORD_PAGE_URL).permitAll()
+//              .anyRequest().hasAnyRole("ADMIN", "WEBUSER")
                 .formLogin()
-                .loginPage("/login").permitAll()
-                .defaultSuccessUrl("/hello", true)
-                .failureUrl("/login?error");
+                	.loginPage("/login").permitAll()
+                	.defaultSuccessUrl("/hello", true)
+                	.failureUrl("/login?error")
+                .and()
+                .exceptionHandling()
+                	.accessDeniedPage("/403");
         	
  //       http.addFilterBefore(new FormLoginAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
